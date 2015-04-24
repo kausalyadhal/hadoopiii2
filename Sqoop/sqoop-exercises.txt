@@ -20,7 +20,7 @@ mysql -uroot -p yelp < create-ratings.sql
 mysql -uroot -p yelp -e "SHOW TABLES"
 
 //Load ratings.txt from local file into "ratings" table
-mysql -uroot -p yelp -e "LOAD DATA LOCAL INFILE 'Yelp_All/ratings.txt' INTO TABLE ratings FIELDS TERMINATED BY '::' OPTIONALLY ENCLOSED BY '\"' LINES TERMINATED BY '\n' IGNORE 1 LINES (userid, itemid, ratings)"
+mysql -uroot -p yelp -e "LOAD DATA LOCAL INFILE 'Yelp_ALL/ratings.txt' INTO TABLE ratings FIELDS TERMINATED BY '::' OPTIONALLY ENCLOSED BY '\"' LINES TERMINATED BY '\n' IGNORE 1 LINES (userid, itemid, ratings)"
 
 //Import ratings from mysql to HDFS
 //sqoop import --connect jdbc:mysql://localhost:3306/yelp -username root -P --table ratings -target-dir /sqoop/ratings -m1
