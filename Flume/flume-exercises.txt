@@ -1,0 +1,6 @@
+﻿啟動log-genearator.py
+python log-generator.py
+
+啟動Flume 1 & 2
+flume-ng agent --conf-file agent1.properties --name agent1
+flume-ng agent --conf-file agent2.properties --name agent2
