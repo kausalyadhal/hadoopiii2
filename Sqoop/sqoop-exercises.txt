@@ -1,32 +1,42 @@
-// 
+//Download Yelp_All.zip 
 wget https://github.com/ywchiu/hadoopiii2/raw/master/Sqoop/Yelp_ALL.zip
+
+//Unzip Yelp_All.zip file
 unzip Yelp_ALL.zip
 
-//建立資料庫 yelp
+//Create yelp database
 mysql -uroot -p -e "CREATE DATABASE yelp"
 
-//檢視資料庫
+//Examine databases
 mysql -uroot -p -e "SHOW DATABASES"
 
-//建立表格 ratings
+//Download create-ratings.sql
 wget https://github.com/ywchiu/hadoopiii2/raw/master/Sqoop/create-ratings.sql
+
+//Create ratings table
 mysql -uroot -p yelp < create-ratings.sql
+
+//List tables
 mysql -uroot -p yelp -e "SHOW TABLES"
 
-
-//將資料從 ratings.txt 放入ratings
+//Load ratings.txt into table ratings
 mysql -uroot -p yelp -e "LOAD DATA LOCAL INFILE 'ratings.txt' INTO TABLE ratings FIELDS TERMINATED BY '::' OPTIONALLY ENCLOSED BY '\"' LINES TERMINATED BY '\n' IGNORE 1 LINES (userid, itemid, ratings)"
 
-//執行資料轉移
+//Import ratings from mysql to HDFS
 //sqoop import --connect jdbc:mysql://localhost:3306/yelp -username root -P --table ratings -target-dir /sqoop/ratings -m1
 sqoop import --connect jdbc:mysql://localhost:3306/yelp -username root -password cloudera --query "select * from ratings where 1=1 and \$CONDITIONS limit 2000" -target-dir /user/cloudera/ratings -m1
 
-//建立資料表
+//Download create-ratings_tmp.sql
 wget https://github.com/ywchiu/hadoopiii2/raw/master/Sqoop/create-ratings_tmp.sql
+
+//Create ratings_tmp table
 mysql -uroot -p yelp < create-ratings_tmp.sql
+
+//List tables
 mysql -uroot -p yelp -e "SHOW TABLES"
 
-//使用Sqoop Export 將資料從HDFS 轉出至MySQL
+//Export data from HDFS to ratings_tmp
 sqoop export --connect jdbc:mysql://localhost:3306/yelp --table ratings_tmp --export-dir /user/cloudera/ratings --username root --P -m 1 --input-fields-terminated-by ','
 
-
+//Query data in ratings_tmp
+mysql -uroot -p yelp -e "select * from ratings_tmp limit 100"
