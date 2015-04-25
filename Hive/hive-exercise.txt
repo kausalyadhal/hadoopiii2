@@ -1,3 +1,7 @@
+//Get file from GitHub
+wget https://github.com/ywchiu/hadoopiii2/raw/master/Hive/create-finance.sql
+wget https://github.com/ywchiu/hadoopiii2/raw/master/Hive/finance.csv
+
 //Create finance database
 mysql -uroot -p -e 'create database finance' 
 
