@@ -49,7 +49,7 @@ wget https://github.com/ywchiu/hadoopiii2/raw/master/Pig/ISH-HISTORY.tsv
 hadoop fs -put ISH-HISTORY.tsv /user/cloudera/
 
 //Merge station name with join 
-stations = LOAD 'ISH-HISTORY.tsv' USING PigStorage(',') AS (station:int,wban:int,station_name:chararray,country:chararray,state:chararray);
+stations = LOAD 'ISH-HISTORY.tsv' USING PigStorage('\t') AS (station:int,wban:int,station_name:chararray,country:chararray,state:chararray);
 joined = JOIN maxTemps BY (station,wban), stations BY (station,wban);
 ordered = ORDER joined BY $4 DESC;
 DUMP ordered;
